@@ -6,11 +6,12 @@
 	"scripts": {
 		"build": "npx babel src -d build --watch"
 	},
-	"author": "",
+	"author": "Pavel Zapletal <Pavel.Zapletal01@dixonscarphone.com>",
 	"license": "ISC",
 	"devDependencies": {
 		"@babel/cli": "^7.12.13",
 		"@babel/core": "^7.12.13",
 		"@babel/preset-env": "^7.12.13"
-	}
+	},
+	"repository": "https://gitlab.com/kapaakovy_projekty/bowlinggame.git"
 }
