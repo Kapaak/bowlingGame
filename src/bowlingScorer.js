@@ -2,8 +2,9 @@ let actualScore = 0;
 let frame = 0;
 let turn = 0;
 let isGameOver;
-let table = [];
 let pins = [];
+let scoreTable = [];
+
 /*
   {
     frameId: 0,
@@ -11,8 +12,6 @@ let pins = [];
     frameScore: 0
   }
 */
-
-let scoreTable = [];
 
 function newGame() {
 	actualScore = 0;
@@ -31,32 +30,25 @@ function gameOver() {
 
 function throwedPins(count) {
 	// dummy logic
-	if (turn === 1 && count === 10) {
-		count = "X";
-		//spare
-	}
-	if (turn === 0 && count === 10) {
-		count = "X";
-	}
+
 	if (turn === 1) {
 		pins = [...pins, count];
+		console.log(pins);
 		updateTable(pins);
 		turn = 0;
-	}
-
-	if (turn === 0) {
+		frame++;
+	} else if (turn === 0) {
 		pins = [count];
+		updateTable(pins);
 		turn++;
 	}
 }
 
 function updateTable(pins) {
-	table[frame] = {
+	scoreTable[frame] = {
 		frameId: frame,
 		throwedPins: pins,
 	};
-	console.log(table);
-	frame++;
 }
 
 function getActualState() {

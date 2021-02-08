@@ -10,4 +10,4 @@ throwedPins(10);
 // throwedPins(3);
 // throwedPins(5);
 
-// console.log(getActualState());
+console.log(getActualState());
