@@ -67,39 +67,41 @@ function newGame() {
 // 	}
 // }
 
-function setFrame(count, bonus = false) {
-	// if (turn === 0 && !bonus) {
-	// }
+function setFrame(count) {
 	score += count;
 	pins = [...pins, count];
-
+	convertSpecialNumbers(pins, score);
 	if (turn === 0) {
-		updateTable(pins, score, score);
-		turn++;
+		if (count === 10) {
+			updateTable(["X", " "], score); // strike
+			pins = [];
+			frame++;
+			bonus = 2;
+		} else turn++;
 	} else if (turn === 1) {
-		convertSpecialNumbers(pins, score, pins[0] + pins[1]);
+		if (pins[0] + pins[1] === 10) bonus += 1; //spare .. bacha mozna jeste dela chybu se strikem
 		frame++;
 		turn = 0;
 		pins = [];
 	}
 }
 
-function convertSpecialNumbers(pins, score, frameScore) {
+function applyBonus(count) {
+	score += count;
+	scoreTable[frame - 1].frameScore = score;
+	bonus--;
+}
+
+function convertSpecialNumbers(pins, score) {
+	let spareCounter = 0;
 	let newPins = [...pins];
-
-	newPins.map((pin, index) => {
-		if (pin === 10 && index === 0) newPins[index] = "X";
-		else if (pin[0] + pin[1] === 10) newPins[index] = "/";
-		else if (pin === 0) newPins[index] = "-";
+	newPins = newPins.map((pin, index) => {
+		spareCounter += pin;
+		if (pin === 10 && index === 0) return "X";
+		if (spareCounter === 10 && pins[0] !== 10) return "/";
+		if (pin === 0) return "-";
+		return pin;
 	});
-	//tohle dole mi nefungovalo
-	// newPins.map((pin, index) => {
-	// 	if (pin === 10 && index === 0) pin = "X";
-	// 	else if (pin[0] + pin[1] === 10) pin = "/";
-	// 	else if (pin === 0) pin = "-";
-	// });
-
-	console.log(newPins);
 	updateTable(newPins, score);
 }
 
@@ -108,10 +110,7 @@ function convertSpecialNumbers(pins, score, frameScore) {
 //mozna udelat specialni funkci na prepocitani bonusu
 
 function throwedPins(count) {
-	const strike = turn === 0 && count === 10;
-	const spare =
-		(turn === 1 && pins[0] + count === 10) || (turn === 1 && count === 10);
-
+	if (bonus > 0) applyBonus(count);
 	setFrame(count);
 
 	// logic 2
