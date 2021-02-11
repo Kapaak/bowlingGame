@@ -16,17 +16,21 @@ function newGame() {
 }
 
 function setFrame(count) {
+	console.log(updateTarget);
 	score += count;
 	pins = [...pins, count];
 	updateTable(pins, score);
 	if (turn === 0) {
 		if (count === 10) {
+			if (bonus === 0) updateTarget = 0;
 			pins = [];
 			frame++;
 			bonus = 2;
 			if (updateTarget < 2) updateTarget += 1;
 		} else {
 			turn++;
+
+			// updateTarget = 0;
 		}
 	} else if (turn === 1) {
 		if (pins[0] + pins[1] === 10) bonus += 1; //spare .. bacha mozna jeste dela chybu se strikem
@@ -34,68 +38,48 @@ function setFrame(count) {
 		turn = 0;
 		pins = [];
 	}
+	// console.log(
+	// 	"added",
+	// 	count,
+	// 	" to",
+	// 	frame - 1,
+	// 	"score is ",
+	// 	score,
+	// 	"turn",
+	// 	turn
+	// );
 }
 function applyBonus(count) {
 	if (updateTarget === 1) {
 		scoreTable[frame - 1].frameScore += count;
 		score += count;
 		bonus--;
-		console.log(
-			"added",
-			count,
-			" to",
-			frame - 1,
-			"score is ",
-			score,
-			"turn",
-			turn
-		);
 	} else if (updateTarget === 2) {
 		if (count !== 10) {
 			if (turn === 0) {
-				console.log(
-					"added",
-					count,
-					" to",
-					frame - 1,
-					"score is ",
-					score,
-					"turn",
-					turn
-				);
-				scoreTable[frame - 2].frameScore += count;
 				score += count;
-
+				score += count;
 				updateTarget--;
-				console.log(score);
+				scoreTable[frame - 2].frameScore += count;
 				scoreTable[frame - 1].frameScore += count + count;
-				score += count;
-				console.log(score);
+				// scoreTable[frame - 1].frameScore += count + count;
 				bonus--;
+				updateTarget = 0;
 			}
 			if (turn === 1) {
-				console.log("added", count, " to", frame - 1, "score is ", score);
 				scoreTable[frame - 1].frameScore += count;
 				score += count;
 				bonus--;
 			}
 		} else {
-			console.log("added", count, " to", frame - 1, "score is ", score);
 			scoreTable[frame - 2].frameScore += count;
 			score += count;
-			// updateTarget--;
-			scoreTable[frame - 1].frameScore += count;
-			score += count;
+			scoreTable[frame - 1].frameScore += count + count;
 			bonus--;
+			console.log("pep");
 		}
 	}
 }
-// function applyBonus(count) {
-// 	scoreTable[frame - updateTarget].frameScore += count;
-// 	score += count;
-// 	bonus--;
-// 	if (updateTarget === 2) updateTarget = 1;
-// }
 
 // function convertSpecialNumbers(pins, score, turnScore, numberOfTurns) {
 // 	let spareCounter = 0;
