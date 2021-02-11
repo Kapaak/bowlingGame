@@ -4,7 +4,7 @@ newGame();
 
 throwedPins(10);
 throwedPins(10);
-throwedPins(3);
+throwedPins(2);
 throwedPins(5);
 // throwedPins(10);
 

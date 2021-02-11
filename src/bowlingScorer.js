@@ -23,8 +23,8 @@ function setFrame(count) {
 		if (count === 10) {
 			pins = [];
 			frame++;
-			if (bonus === 0) bonus = 2;
-			updateTarget += 1;
+			bonus = 2;
+			if (updateTarget < 2) updateTarget += 1;
 		} else {
 			turn++;
 		}
@@ -36,11 +36,43 @@ function setFrame(count) {
 	}
 }
 function applyBonus(count) {
-	scoreTable[frame - updateTarget].frameScore += count;
-	score += count;
-	bonus--;
-	if (updateTarget === 2) updateTarget = 1;
+	console.log(bonus);
+	if (updateTarget === 1) {
+		scoreTable[frame - 1].frameScore += count;
+		score += count;
+		bonus--;
+		console.log("added", count, " to", frame, "score is ", score);
+	} else if (updateTarget === 2) {
+		if (count !== 10) {
+			if (turn === 0) {
+				scoreTable[frame - 2].frameScore += count;
+				score += count;
+				updateTarget--;
+				scoreTable[frame - 1].frameScore += count;
+				score += count;
+				bonus--;
+			}
+			if (turn === 1) {
+				scoreTable[frame - 1].frameScore += count;
+				score += count;
+				bonus--;
+			}
+		} else {
+			scoreTable[frame - 2].frameScore += count;
+			score += count;
+			// updateTarget--;
+			scoreTable[frame - 1].frameScore += count;
+			score += count;
+			bonus--;
+		}
+	}
 }
+// function applyBonus(count) {
+// 	scoreTable[frame - updateTarget].frameScore += count;
+// 	score += count;
+// 	bonus--;
+// 	if (updateTarget === 2) updateTarget = 1;
+// }
 
 // function convertSpecialNumbers(pins, score, turnScore, numberOfTurns) {
 // 	let spareCounter = 0;
