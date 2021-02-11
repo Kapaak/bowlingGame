@@ -36,28 +36,51 @@ function setFrame(count) {
 	}
 }
 function applyBonus(count) {
-	console.log(bonus);
 	if (updateTarget === 1) {
 		scoreTable[frame - 1].frameScore += count;
 		score += count;
 		bonus--;
-		console.log("added", count, " to", frame, "score is ", score);
+		console.log(
+			"added",
+			count,
+			" to",
+			frame - 1,
+			"score is ",
+			score,
+			"turn",
+			turn
+		);
 	} else if (updateTarget === 2) {
 		if (count !== 10) {
 			if (turn === 0) {
+				console.log(
+					"added",
+					count,
+					" to",
+					frame - 1,
+					"score is ",
+					score,
+					"turn",
+					turn
+				);
 				scoreTable[frame - 2].frameScore += count;
 				score += count;
+
 				updateTarget--;
-				scoreTable[frame - 1].frameScore += count;
+				console.log(score);
+				scoreTable[frame - 1].frameScore += count + count;
 				score += count;
+				console.log(score);
 				bonus--;
 			}
 			if (turn === 1) {
+				console.log("added", count, " to", frame - 1, "score is ", score);
 				scoreTable[frame - 1].frameScore += count;
 				score += count;
 				bonus--;
 			}
 		} else {
+			console.log("added", count, " to", frame - 1, "score is ", score);
 			scoreTable[frame - 2].frameScore += count;
 			score += count;
 			// updateTarget--;

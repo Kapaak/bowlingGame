@@ -4,8 +4,8 @@ newGame();
 
 throwedPins(10);
 throwedPins(10);
-throwedPins(2);
-throwedPins(5);
+throwedPins(8);
+throwedPins(1);
 // throwedPins(10);
 
 console.log(getActualState());
