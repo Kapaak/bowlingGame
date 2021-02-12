@@ -16,10 +16,11 @@ function newGame() {
 }
 
 function setFrame(count) {
-	console.log(updateTarget);
+	console.log(updateTarget, "  ", bonus, frame);
 	score += count;
 	pins = [...pins, count];
 	updateTable(pins, score);
+
 	if (turn === 0) {
 		if (count === 10) {
 			if (bonus === 0) updateTarget = 0;
@@ -29,12 +30,18 @@ function setFrame(count) {
 			if (updateTarget < 2) updateTarget += 1;
 		} else {
 			turn++;
-
+			if (bonus > 0) bonus--;
+			if (bonus === 0) updateTarget = 0;
 			// updateTarget = 0;
 		}
 	} else if (turn === 1) {
-		if (pins[0] + pins[1] === 10) bonus += 1; //spare .. bacha mozna jeste dela chybu se strikem
 		frame++;
+
+		if (pins[0] + pins[1] === 10 || pins[1] === 10) {
+			//spare .. bacha mozna jeste dela chybu se strikem
+			bonus = 1;
+			console.log("kraa");
+		} else if (bonus > 0) bonus--;
 		turn = 0;
 		pins = [];
 	}
@@ -62,21 +69,16 @@ function applyBonus(count) {
 				updateTarget--;
 				scoreTable[frame - 2].frameScore += count;
 				scoreTable[frame - 1].frameScore += count + count;
-				// scoreTable[frame - 1].frameScore += count + count;
-				bonus--;
-				updateTarget = 0;
 			}
 			if (turn === 1) {
 				scoreTable[frame - 1].frameScore += count;
 				score += count;
-				bonus--;
 			}
 		} else {
 			scoreTable[frame - 2].frameScore += count;
-			score += count;
 			scoreTable[frame - 1].frameScore += count + count;
-			bonus--;
-			console.log("pep");
+			score += count;
+			score += count;
 		}
 	}
 }
