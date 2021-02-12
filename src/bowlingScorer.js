@@ -16,29 +16,27 @@ function newGame() {
 }
 
 function setFrame(count) {
+	const strike = count === 10;
 	score += count;
 	pins = [...pins, count];
 	convertSpecialNumbers(pins, score);
 
-	if (count === 10 && frame === finalFrame - 1) {
-		if (turn === 1) {
-			isGameOver = true;
-			updateTarget = 0;
-		} else if (turn === 0) {
+	if (strike && frame === finalFrame - 1) {
+		if (turn === 0) {
 			updateTarget = 1;
 			turn++;
 			bonus = 2;
-		}
-	} else if (frame === finalFrame - 1 && turn === 1) {
-		if (pins[0] + count === 10) {
+		} else if (turn === 1) {
+			updateTarget = 0;
 			turn++;
-		} else {
+		} else if (turn === 2) {
+			console.log("game over");
 			isGameOver = true;
 		}
-	} else if (turn === 2) {
+	} else if (frame === finalFrame - 1 && turn === 1) {
 		isGameOver = true;
 	} else if (turn === 0) {
-		if (count === 10) {
+		if (strike) {
 			if (bonus === 0) updateTarget = 0;
 			pins = [];
 			frame++;
@@ -56,32 +54,29 @@ function setFrame(count) {
 		} else if (bonus > 0) bonus--;
 		turn = 0;
 		pins = [];
+	} else if (turn === 2) {
+		isGameOver = true;
 	}
 }
 function applyBonus(count) {
-	if (updateTarget === 1) {
-		scoreTable[frame - 1].frameScore += count;
-		score += count;
-		bonus--;
-	} else if (updateTarget === 2) {
-		if (count !== 10) {
-			if (turn === 0) {
-				score += count;
-				score += count;
-				updateTarget--;
-				scoreTable[frame - 2].frameScore += count;
-				scoreTable[frame - 1].frameScore += count + count;
-			}
-			if (turn === 1) {
-				scoreTable[frame - 1].frameScore += count;
-				score += count;
-			}
-		} else {
+	if (updateTarget === 1) updateFrames();
+	else if (updateTarget === 2) {
+		if (count !== 10 && turn === 0) updateFrames(true);
+		else updateFrames();
+	}
+	function updateFrames(shouldDec = false) {
+		if (updateTarget === 1) {
+			scoreTable[frame - 1].frameScore += count;
+			score += count;
+			bonus--;
+		} else if (updateTarget === 2) {
 			scoreTable[frame - 2].frameScore += count;
 			scoreTable[frame - 1].frameScore += count + count;
 			score += count;
 			score += count;
 		}
+
+		if (shouldDec) updateTarget--;
 	}
 }
 
