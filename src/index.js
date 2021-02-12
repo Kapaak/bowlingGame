@@ -12,5 +12,7 @@ throwedPins(10);
 throwedPins(10);
 throwedPins(10);
 throwedPins(10);
+throwedPins(10);
+throwedPins(10);
 
 console.log(getActualState());

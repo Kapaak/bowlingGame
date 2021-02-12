@@ -16,12 +16,20 @@ function newGame() {
 }
 
 function setFrame(count) {
-	console.log(updateTarget, "  ", bonus, frame);
 	score += count;
 	pins = [...pins, count];
 	updateTable(pins, score);
 
-	if (turn === 0) {
+	if (count === 10 && frame === finalFrame - 1) {
+		if (turn === 1) {
+			isGameOver = true;
+		}
+		if (turn === 0) {
+			turn++;
+			bonus = 2;
+			console.log("final round");
+		}
+	} else if (turn === 0) {
 		if (count === 10) {
 			if (bonus === 0) updateTarget = 0;
 			pins = [];
@@ -32,29 +40,16 @@ function setFrame(count) {
 			turn++;
 			if (bonus > 0) bonus--;
 			if (bonus === 0) updateTarget = 0;
-			// updateTarget = 0;
 		}
 	} else if (turn === 1) {
 		frame++;
 
 		if (pins[0] + pins[1] === 10 || pins[1] === 10) {
-			//spare .. bacha mozna jeste dela chybu se strikem
 			bonus = 1;
-			console.log("kraa");
 		} else if (bonus > 0) bonus--;
 		turn = 0;
 		pins = [];
 	}
-	// console.log(
-	// 	"added",
-	// 	count,
-	// 	" to",
-	// 	frame - 1,
-	// 	"score is ",
-	// 	score,
-	// 	"turn",
-	// 	turn
-	// );
 }
 function applyBonus(count) {
 	if (updateTarget === 1) {
