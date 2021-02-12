@@ -1,7 +1,27 @@
 import { newGame, throwedPins, getActualState } from "./bowlingScorer.js";
 
 newGame();
-
+// throwedPins(8);
+// throwedPins(0);
+// throwedPins(9);
+// throwedPins(1);
+// throwedPins(10);
+// throwedPins(9);
+// throwedPins(0);
+// throwedPins(2);
+// throwedPins(2);
+// throwedPins(10);
+// throwedPins(10);
+// throwedPins(3);
+// throwedPins(3);
+// throwedPins(10);
+// throwedPins(5);
+// throwedPins(2);
+// throwedPins(2);
+// throwedPins(2);
+throwedPins(10);
+throwedPins(10);
+throwedPins(10);
 throwedPins(10);
 throwedPins(10);
 throwedPins(10);

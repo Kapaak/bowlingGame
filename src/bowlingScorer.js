@@ -1,7 +1,7 @@
 let score = 0;
 let frame = 0;
 let turn = 0;
-let isGameOver;
+let isGameOver = false;
 const finalFrame = 10;
 let pins = [];
 let scoreTable = [];
@@ -18,17 +18,25 @@ function newGame() {
 function setFrame(count) {
 	score += count;
 	pins = [...pins, count];
-	updateTable(pins, score);
+	convertSpecialNumbers(pins, score);
 
 	if (count === 10 && frame === finalFrame - 1) {
 		if (turn === 1) {
 			isGameOver = true;
-		}
-		if (turn === 0) {
+			updateTarget = 0;
+		} else if (turn === 0) {
+			updateTarget = 1;
 			turn++;
 			bonus = 2;
-			console.log("final round");
 		}
+	} else if (frame === finalFrame - 1 && turn === 1) {
+		if (pins[0] + count === 10) {
+			turn++;
+		} else {
+			isGameOver = true;
+		}
+	} else if (turn === 2) {
+		isGameOver = true;
 	} else if (turn === 0) {
 		if (count === 10) {
 			if (bonus === 0) updateTarget = 0;
@@ -38,14 +46,13 @@ function setFrame(count) {
 			if (updateTarget < 2) updateTarget += 1;
 		} else {
 			turn++;
-			if (bonus > 0) bonus--;
 			if (bonus === 0) updateTarget = 0;
 		}
 	} else if (turn === 1) {
 		frame++;
-
 		if (pins[0] + pins[1] === 10 || pins[1] === 10) {
 			bonus = 1;
+			updateTarget = 1;
 		} else if (bonus > 0) bonus--;
 		turn = 0;
 		pins = [];
@@ -78,22 +85,24 @@ function applyBonus(count) {
 	}
 }
 
-// function convertSpecialNumbers(pins, score, turnScore, numberOfTurns) {
-// 	let spareCounter = 0;
-// 	let newPins = [...pins];
-// 	newPins = newPins.map((pin, index) => {
-// 		spareCounter += pin;
-// 		if (pin === 10 && index === 0) return "X";
-// 		if (spareCounter === 10 && pins[0] !== 10) return "/";
-// 		if (pin === 0) return "-";
-// 		return pin;
-// 	});
-// 	updateTable(newPins, score, turnScore, numberOfTurns);
-// }
+function convertSpecialNumbers(pins, score) {
+	let spareCounter = 0;
+	let newPins = [...pins];
+	newPins = newPins.map((pin, index) => {
+		spareCounter += pin;
+		if (pin === 10 && index === 0) return "X";
+		if (spareCounter === 10 && pins[0] !== 10) return "/";
+		if (pin === 0) return "-";
+		return pin;
+	});
+	updateTable(newPins, score);
+}
 
 function throwedPins(count) {
-	if (bonus > 0) applyBonus(count);
-	setFrame(count);
+	if (!isGameOver) {
+		if (bonus > 0) applyBonus(count);
+		setFrame(count);
+	}
 }
 
 function updateTable(pins, score) {
@@ -104,7 +113,6 @@ function updateTable(pins, score) {
 			frameScore: score,
 		};
 	}
-	isGameOver = true;
 }
 
 function getActualState() {
